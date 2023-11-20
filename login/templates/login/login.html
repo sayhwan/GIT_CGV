@@ -1,0 +1,24 @@
+{% extends 'login/login_base.html' %}
+{% block contents %}
+<div> 로그인 페이지!</div>
+
+<!--
+    로그인 페이지를 폼 형태로 구현하여 넣어줌
+    forms에서 하나씩 뽑아서 아이디, 비밀번호 출력
+    error가 있을 시 error메세지도 출력
+-->
+<form action="" method="POST">
+    {% csrf_token %}
+    {% for form in forms%}
+    <div>
+        <label for="{{form.id_for_label}}">{{form.label}}</label>
+        {{form}}
+    </div>
+    {% endfor %}
+
+    {% if error %}
+    {{error}}
+    {% endif %}
+    <button type="submit" name="login-submit" value="login">로그인</button>
+</form>
+{% endblock contents %}

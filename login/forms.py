@@ -1,89 +1,176 @@
+from typing import Any, Dict
 from django import forms
-from django.contrib.auth.forms import ReadOnlyPasswordHashField
-from django.utils.translation import ugettext_lazy as _
+from .models import User
+from argon2 import PasswordHasher, exceptions
+from django.contrib.auth import authenticate, login
 
-from .models import User, UserManager
 
-
-class UserCreationForm(forms.ModelForm):
-    # 사용자 생성 폼
-    email = forms.EmailField(
-        label=_('Email'),
-        required=True,
-        widget=forms.EmailInput(
-            attrs={
-                'class': 'form-control',
-                'placeholder': _('Email address'),
-                'required': 'True',
-            }
-        )
-    )
-    nickname = forms.CharField(
-        label=_('Nickname'),
+# 모델폼을 구현하는 형태로 charField와 같은 모델을 사용하여 구현
+# 회원가입 기능
+class RegisterForm(forms.ModelForm):
+    # id
+    user_id = forms.CharField(
+        label='아이디',
         required=True,
         widget=forms.TextInput(
             attrs={
-                'class': 'form-control',
-                'placeholder': _('Nickname'),
-                'required': 'True',
+                'class': 'user-id',
+                'placeholder': '아이디'
             }
-        )
+        ),
+        error_messages={'required': '아이디를 입력해주세요.',
+                        'unique': '중복된 아이디입니다.'}
+
     )
-    password1 = forms.CharField(
-        label=_('Password'),
+    # pw
+    user_pw = forms.CharField(
+        label='비밀번호',
+        required=True,
         widget=forms.PasswordInput(
             attrs={
-                'class': 'form-control',
-                'placeholder': _('Password'),
-                'required': 'True',
+                'class': 'user-pw',
+                'placeholder': '비밀번호'
             }
-        )
+        ),
+        error_messages={'required': '비밀번호를 입력해주세요.'}
+
     )
-    password2 = forms.CharField(
-        label=_('Password confirmation'),
+    # pw confirm
+    user_pw_confirm = forms.CharField(
+        label='비밀번호 확인',
+        required=True,
         widget=forms.PasswordInput(
             attrs={
-                'class': 'form-control',
-                'placeholder': _('Password confirmation'),
-                'required': 'True',
+                'class': 'user-pw-confirm',
+                'placeholder': '비밀번호 확인'
             }
-        )
+        ),
+        error_messages={'required': '비밀번호가 일치하지 않습니다'}
+
+    )
+    # name
+    user_name = forms.CharField(
+        label='이름',
+        required=True,
+        widget=forms.TextInput(
+            attrs={
+                'class': 'user-name',
+                'placeholder': '이름'
+            }
+        ),
+        error_messages={'required': '닉네임을 입력해주세요.'}
+
+    )
+    # email
+    user_email = forms.CharField(
+        label='이메일',
+        required=True,
+        widget=forms.EmailInput(
+            attrs={
+                'class': 'user-email',
+                'placeholder': '이메일'
+            }
+        ),
+        error_messages={'required': '이메일을 입력해주세요.'}
+
     )
 
+    field_order = [
+        'user_id',
+        'user_pw',
+        'user_pw_confirm',
+        'user_name',
+        'user_email',
+    ]
+
+    # DB에 저장
     class Meta:
         model = User
-        fields = ('email', 'nickname','cash')
+        fields = [
+            'user_id',
+            'user_pw',
+            'user_name',
+            'user_email',
+        ]
 
-    def clean_password2(self):
-        # 두 비밀번호 입력 일치 확인
-        password1 = self.cleaned_data.get("password1")
-        password2 = self.cleaned_data.get("password2")
-        if password1 and password2 and password1 != password2:
-            raise forms.ValidationError("Passwords don't match")
-        return password2
+    # error 처리
+    def clean(self):
+        cleaned_data = super().clean()
 
-    def save(self, commit=True):
-        # Save the provided password in hashed format
-        user = super(UserCreationForm, self).save(commit=False)
-        user.email = UserManager.normalize_email(self.cleaned_data['email'])
-        user.set_password(self.cleaned_data["password1"])
-        if commit:
-            user.save()
-        return user
+        user_id = cleaned_data.get('user_id', '')
+        user_pw = cleaned_data.get('user_pw', '')
+        user_pw_confirm = cleaned_data.get('user_pw_confirm', '')
+        user_name = cleaned_data.get('user_name', '')
+        user_email = cleaned_data.get('user_email', '')
+
+        if user_pw != user_pw_confirm:
+            return self.add_error('user_pw_confirm', '비밀번호가 다릅니다.')
+        elif not (4 <= len(user_id) <= 16):
+            return self.add_error('user_id', '아이디는 4~16자로 입력해 주세요.')
+        elif 8 > len(user_pw):
+            return self.add_error('user_pw', '비밀번호는 8자 이상으로 적어주세요.')
+        else:
+            self.user_id = user_id
+            self.user_pw = PasswordHasher().hash(user_pw)
+            self.user_pw_confirm = user_pw_confirm
+            self.user_name = user_name
+            self.user_email = user_email
 
 
-class UserChangeForm(forms.ModelForm):
-    # 비밀번호 변경 폼
-    password = ReadOnlyPasswordHashField(
-        label=_('Password')
+# Form으로 구현하며 login기능을 담고 있음
+class LoginForm(forms.Form):
+    user_id = forms.CharField(
+        max_length=32,
+        label='아이디',
+        required=True,
+        widget=forms.TextInput(
+            attrs={
+                'class': 'user-id',
+                'placeholder': '아이디'
+            }
+        ),
+        error_messages={'required': '아이디를 입력해주세요.'}
+
+    )
+    user_pw = forms.CharField(
+        max_length=128,
+        label='비밀번호',
+        required=True,
+        widget=forms.PasswordInput(
+            attrs={
+                'class': 'user-pw',
+                'placeholder': '비밀번호'
+            }
+        ),
+        error_messages={'required': '비밀번호를 입력해주세요.'}
     )
 
-    class Meta:
-        model = User
-        fields = ('email', 'password', 'last_name', 'first_name', 'is_active', 'is_superuser')
+    field_order = [
+        'user_id',
+        'user_pw',
+    ]
 
-    def clean_password(self):
-        # Regardless of what the user provides, return the initial value.
-        # This is done here, rather than on the field, because the
-        # field does not have access to the initial value
-        return self.initial["password"]
+    # error 처리
+    def clean(self):
+        cleaned_data = super().clean()
+
+        user_id = cleaned_data.get('user_id', '')
+        user_pw = cleaned_data.get('user_pw', '')
+
+        if user_id == '':
+            return self.add_error('user_id', '아이디를 다시 입력해 주세요')
+        elif user_pw == '':
+            return self.add_error('user_pw', '비밀번호를 다시 입력해 주세요.')
+        else:
+            # 예외 처리
+            # 유저 id 존재 안하면 에러
+            try:
+                user = User.objects.get(user_id=user_id)
+            except User.DoesNotExist:
+                return self.add_error('user_id', '아이디가 존재하지 않습니다')
+            try:
+                # 비밀번호 불일치 에러
+                PasswordHasher().verify(user.user_pw, user_pw)
+            except exceptions.VerifyMismatchError:
+                return self.add_error('user_pw', '비밀번호 불일치')
+            self.login_session = user.user_id

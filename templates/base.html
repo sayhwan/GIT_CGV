@@ -50,11 +50,18 @@
         <a href="/movie">영화</a>
         <a href="/ticketing">예매</a>
         <div id="login">
-            <a href="/login">로그인</a>
-            <a href="/register">회원가입</a>
+            {% if login_session %}
+            <a href="{% url 'login:logout' %}">로그아웃</a>
+            {% else %}
+            <a href="{% url 'login:login' %}">로그인</a>
+            <a href="{% url 'login:register' %}">회원가입</a>
+            {% endif %}
+
         </div>
         {% endblock %}
     </div>
+    {% block contents %}
+    {% endblock %}
     <footer>
         <div>
             인천광역시 연수동 송도2동 아카데미로 192<br>

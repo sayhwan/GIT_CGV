@@ -1,3 +1,28 @@
 from django.db import models
-
+from movies.models import Movie
 # Create your models here.
+
+class Cinemas(models.Model):
+    numbering = models.IntegerField(default=0)
+    seat = models.CharField(default="(5,5)",max_length=10)
+
+    def __str__(self):
+        return str(self.numbering)+"관"
+    class Meta:
+        db_table='Cinemas'
+        verbose_name='극장'
+        verbose_name_plural='극장'
+class Ticketing(models.Model):
+    cinema = models.ForeignKey(Cinemas,on_delete=models.CASCADE)
+    seat_all = models.JSONField(default=list)
+    movie = models.ForeignKey(Movie,on_delete=models.CASCADE)
+    start_time = models.TextField(max_length=20,verbose_name='시작 시간')
+    finish_time = models.TextField(max_length=20,verbose_name='끝나는 시간')
+    date = models.TextField(max_length=20,verbose_name='날짜')
+    def __str__(self):
+        return self.date + '/' + self.start_time + "~" + self.finish_time
+
+    class Meta:
+        db_table='tiketing'
+        verbose_name='예매'
+        verbose_name_plural='예매'

@@ -1,0 +1,15 @@
+{% extends 'movies/movie_base.html' %}
+{% block contents %}
+    <div>
+        {% for movie in movie_list %}
+            <div id="movie">
+                <img src="{{movie.image.url}}">
+                <a>movie.title</a>
+                <a>movie.age</a>
+                <a>movie.image</a>
+                <a>movie.image.url</a>
+                <button onclick="location.href='ticketing.html'">예매하기</button>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

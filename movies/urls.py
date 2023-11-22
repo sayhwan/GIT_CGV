@@ -1,4 +1,8 @@
-from django.urls import include
-path('movies/', include('movies.urls'))
+from django.urls import path
+from books.views import *
 
-app_name = "movies"
+app_name = 'movies'
+urlpatterns = [
+
+]
+

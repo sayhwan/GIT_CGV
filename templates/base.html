@@ -58,7 +58,6 @@
         margin-left:250px;
         margin-right:250px;
         }
-
         footer{
         display:grid;
         grid-template-columns:1fr;
@@ -67,6 +66,41 @@
         margin-left:250px;
         margin-bottom:30px;
         }
+         .movie-wrap .image-wrap {
+        position: relative;
+        width: 200px;
+        height: 290px;
+        }
+
+        .movie-wrap .more {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+            border: 1px solid white;
+            border-radius: 5px;
+            padding: 5px 10px;
+            background-color: black;
+            color: white;
+            text-align: center;
+        }
+        .button {
+            display:flex;
+            position: absolute;
+            bottom: 10px;
+            left: 0;
+            right: 0;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 10px;
+        }
+        .movie-wrap:hover .more {
+            opacity: 1;
+            visibility: visible;
+        }
+
     </style>
 </head>
 <body>
@@ -89,13 +123,19 @@
     {% block contents %}
     <br>
     <br>
-    <h2>박스오피스</h2>
+    {% block title%}<h2>박스오피스</h2>{% endblock %}
     <br>
     <br>
     <div id="movies">
         {% for movie in movie_list %}
-            <div>
-                <img src="{{movie.image.url}}" width="200" height="290">
+            <div class="movie-wrap" onmouseover="showButtons(this)" onmouseout="hideButtons(this)">
+                <div class="image-wrap">
+                    <img src="{{movie.image.url}}" width="200" height="290">
+                    <div class="button">
+                        <a href="movie_detail/{{ movie.id }}" class="more">상세 정보</a>
+                        <a href="ticketing/index" class="more">예매하기</a>
+                    </div>
+                </div>
                 <div id="moviebar">
                     <div style="float: left">
                     {% if movie.age == 0 %}
@@ -131,5 +171,22 @@
         <div>
         </div>
     </footer>
+    <script>
+    function showButtons(element) {
+        var buttons = element.querySelectorAll('.more');
+        buttons.forEach(function(button) {
+            button.style.opacity = 1;
+            button.style.visibility = 'visible';
+        });
+    }
+
+    function hideButtons(element) {
+        var buttons = element.querySelectorAll('.more');
+        buttons.forEach(function(button) {
+            button.style.opacity = 0;
+            button.style.visibility = 'hidden';
+        });
+    }
+    </script>
 </body>
 </html>

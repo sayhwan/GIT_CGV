@@ -1,16 +1,29 @@
 {% extends 'ticketing/index.html' %}
 {% block movies %}
 <h1>{{movie.title}}</h1>
-    <div id ="movie_time"></div>
-
+    {% for ticketing in movie.ticketing_set.all %}
+    <div class="ticketing-data" data-year="{{ ticketing.date.year }}" data-month="{{ ticketing.date.month }}" data-day="{{ ticketing.date.day }}"
+    data-hour="{{ ticketing.date.hour }}" data-minute="{{ ticketing.date.minute }}" data-time="{{ ticketing.movie_times}}"></div>
+    {% endfor %}
+    <h3 id="movie_time"></h3>
 <script>
-    let choice_day = document.getElementsByClassName("choiceDay");
-    let date_array = JSON.parse('{{ date_list|safe }}');
-    let s="";
-    for (let date of date_array) {
-        s+=date.year;
-    }
-    var movieTimeElement = document.getElementById("movie_time");
-    movieTimeElement.innerHTML = s;
+    let compare = (ch_date,date) => {
+        let s="";
+        var movie_Elements = document.querySelectorAll('.ticketing-data');
+        movie_Elements.forEach(function(element) {
+            movie_year=element.dataset.year;
+            movie_month=element.dataset.month;
+            movie_day=element.dataset.day;
+            movie_hour=element.dataset.hour;
+            movie_minute=element.dataset.minute;
+            movie_time=element.dataset.time;
+            if (movie_year == ch_date.getFullYear() && movie_month==ch_date.getMonth() + 1 && movie_day == date){
+                var newContent = "시작 시간: " + (movie_hour) + ":" + (movie_minute)+ " 상영 시간 : " + movie_time + "<br>";
+                s+=newContent
+            }
+        });
+        var times = document.getElementById('movie_time')
+        times.innerHTML=s;
+   }
 </script>
 {% endblock %}

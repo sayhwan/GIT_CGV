@@ -14,7 +14,7 @@ class Cinemas(models.Model):
         verbose_name_plural='극장'
 class Ticketing(models.Model):
     cinema = models.ForeignKey(Cinemas,on_delete=models.CASCADE)
-    seat_all = models.JSONField(default=list)
+    seat_all = models.JSONField(default=listgi)
     movie = models.ForeignKey(Movie,on_delete=models.CASCADE)
     date = models.DateTimeField(verbose_name='날짜')
     movie_times = models.CharField(max_length=20,verbose_name='상영 시간')
@@ -25,3 +25,6 @@ class Ticketing(models.Model):
         db_table='tiketing'
         verbose_name='예매'
         verbose_name_plural='예매'
+
+class Area(models.Model):
+    name = models.CharField(max_length=200)

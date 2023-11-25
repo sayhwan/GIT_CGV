@@ -7,4 +7,10 @@ from movies.models import *
 class MovieList(ListView):
     model = Movie
 
+    def get_context_data(self, **kwargs):
+        login_session = self.request.session.get('login_session', '')
+        context = super().get_context_data(**kwargs)
+        context['login_session'] = login_session
+        return context
+
 

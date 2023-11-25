@@ -21,6 +21,11 @@
         text-decoration: none;
         color:white;
         }
+        #movie_a {
+        text-align:center;
+        text-decoration: none;
+        color:black;
+        }
         #head{
         font-family: 'Do Hyeon', sans-serif;
         background-color: navy;
@@ -203,8 +208,8 @@
                 <div class="image-wrap">
                     <img src="{{movie.image.url}}" width="200" height="290">
                     <div class="button">
-                        <a href="movie_detail/{{ movie.id }}" class="more">상세 정보</a>
-                        <a href="{% url 'ticketing:index' %}" class="more">예매하기</a>
+                        <a href="movie_detail/{{ movie.id }}" class="more" >상세 정보</a>
+                        <a href="{% url 'ticketing:index' %}" class="more" >예매하기</a>
                     </div>
                 </div>
                 <div id="moviebar">

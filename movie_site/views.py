@@ -10,6 +10,7 @@ def Base(request):
         context['login_session'] = False
     else:
         context['login_session'] = True
+
     movies=Movie.objects.all().order_by('rank')[:4]
     context['movie_list']=movies
     return render(request, 'base.html', context)

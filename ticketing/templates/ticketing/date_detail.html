@@ -3,27 +3,154 @@
 <h1>{{movie.title}}</h1>
     {% for ticketing in movie.ticketing_set.all %}
     <div class="ticketing-data" data-year="{{ ticketing.date.year }}" data-month="{{ ticketing.date.month }}" data-day="{{ ticketing.date.day }}"
-    data-hour="{{ ticketing.date.hour }}" data-minute="{{ ticketing.date.minute }}" data-time="{{ ticketing.movie_times}}"></div>
+    data-hour="{{ ticketing.date.hour }}" data-minute="{{ ticketing.date.minute }}" data-time="{{ ticketing.movie_times}}" data-id="{{ ticketing.id }}"></div>
+    <h3 id="movie_time_{{ticketing.id}}"></h3>
     {% endfor %}
-    <h3 id="movie_time"></h3>
+{% endblock %}
+{% block calender %}
+    <div id="Calendar_div">
+        <table class="Calendar">
+            <thead>
+                <tr>
+                    <td onClick="prevCalendar();" style="cursor:pointer;">&#60;</td>
+                    <td colspan="5">
+                        <span id="calYear"></span>년
+                        <span id="calMonth"></span>월
+                    </td>
+                    <td onClick="nextCalendar();" style="cursor:pointer;">&#62;</td>
+                </tr>
+                <tr>
+                    <td>일</td>
+                    <td>월</td>
+                    <td>화</td>
+                    <td>수</td>
+                    <td>목</td>
+                    <td>금</td>
+                    <td>토</td>
+                </tr>
+            </thead>
+
+            <tbody>
+            </tbody>
+        </table>
+    </div>
 <script>
+        window.onload = function () { buildCalendar(); }    // 웹 페이지가 로드되면 buildCalendar 실행
+
+
+        let nowMonth = new Date();  // 현재 달을 페이지를 로드한 날의 달로 초기화
+        let today = new Date();// 페이지를 로드한 날짜를 저장
+        today.setHours(0, 0, 0, 0);    // 비교 편의를 위해 today의 시간을 초기화
+
+        // 달력 생성 : 해당 달에 맞춰 테이블을 만들고, 날짜를 채워 넣는다.
+        function buildCalendar() {
+
+            let firstDate = new Date(nowMonth.getFullYear(), nowMonth.getMonth(), 1);     // 이번달 1일
+            let lastDate = new Date(nowMonth.getFullYear(), nowMonth.getMonth() + 1, 0);  // 이번달 마지막날
+            compare(nowMonth,nowMonth.getDate());
+
+
+            let tbody_Calendar = document.querySelector(".Calendar > tbody");
+            document.getElementById("calYear").innerText = nowMonth.getFullYear();             // 연도 숫자 갱신
+            document.getElementById("calMonth").innerText = leftPad(nowMonth.getMonth() + 1);  // 월 숫자 갱신
+
+            while (tbody_Calendar.rows.length > 0) {                        // 이전 출력결과가 남아있는 경우 초기화
+                tbody_Calendar.deleteRow(tbody_Calendar.rows.length - 1);
+            }
+
+            let nowRow = tbody_Calendar.insertRow();        // 첫번째 행 추가
+
+            for (let j = 0; j < firstDate.getDay(); j++) {  // 이번달 1일의 요일만큼
+                let nowColumn = nowRow.insertCell();        // 열 추가
+            }
+
+            for (let nowDay = firstDate; nowDay <= lastDate; nowDay.setDate(nowDay.getDate() + 1)) {   // day는 날짜를 저장하는 변수, 이번달 마지막날까지 증가시키며 반복
+
+                let nowColumn = nowRow.insertCell();        // 새 열을 추가하고
+
+
+                let newDIV = document.createElement("p");
+                newDIV.innerHTML = leftPad(nowDay.getDate());       // 추가한 열에 날짜 입력
+                nowColumn.appendChild(newDIV);
+
+                if (nowDay.getDay() == 6) {                 // 토요일인 경우
+                    nowRow = tbody_Calendar.insertRow();    // 새로운 행 추가
+                }
+
+                if (nowDay < today) {                       // 지난날인 경우
+                    newDIV.className = "pastDay";
+                }
+                else if (nowDay.getFullYear() == today.getFullYear() && nowDay.getMonth() == today.getMonth() && nowDay.getDate() == today.getDate()) { // 오늘인 경우
+                    newDIV.className = "today";
+                    newDIV.onclick = function () { choiceDate(this); }
+                }
+                else {                                      // 미래인 경우
+                    newDIV.className = "futureDay";
+                    newDIV.onclick = function () { choiceDate(this); }
+                }
+            }
+        }
+
+        // 날짜 선택
+        function choiceDate(newDIV) {
+            if (document.getElementsByClassName("choiceDay")[0]) {                              // 기존에 선택한 날짜가 있으면
+                document.getElementsByClassName("choiceDay")[0].classList.remove("choiceDay");  // 해당 날짜의 "choiceDay" class 제거
+            }
+            newDIV.classList.add("choiceDay");        // 선택된 날짜에 "choiceDay" class 추가
+            compare(nowMonth,newDIV.textContent);
+        }
+
+        // 이전달 버튼 클릭
+        function prevCalendar() {
+            nowMonth = new Date(nowMonth.getFullYear(), nowMonth.getMonth() - 1, nowMonth.getDate());   // 현재 달을 1 감소
+            buildCalendar();    // 달력 다시 생성
+        }
+        // 다음달 버튼 클릭
+        function nextCalendar() {
+            nowMonth = new Date(nowMonth.getFullYear(), nowMonth.getMonth() + 1, nowMonth.getDate());   // 현재 달을 1 증가
+            buildCalendar();    // 달력 다시 생성
+        }
+
+        // input값이 한자리 숫자인 경우 앞에 '0' 붙혀주는 함수
+        function leftPad(value) {
+            if (value < 10) {
+                value = "0" + value;
+                return value;
+            }
+            return value;
+        }
     let compare = (ch_date,date) => {
-        let s="";
+        s="";
         var movie_Elements = document.querySelectorAll('.ticketing-data');
+        del_text(movie_Elements);
         movie_Elements.forEach(function(element) {
-            movie_year=element.dataset.year;
-            movie_month=element.dataset.month;
-            movie_day=element.dataset.day;
-            movie_hour=element.dataset.hour;
-            movie_minute=element.dataset.minute;
-            movie_time=element.dataset.time;
+            s="";
+            let movie_year=element.dataset.year;
+            let movie_month=element.dataset.month;
+            let movie_day=element.dataset.day;
+            let movie_hour=element.dataset.hour;
+            let movie_minute=element.dataset.minute;
+            let movie_time=element.dataset.time;
+            let ticketing_id=element.dataset.id;
+            var times = document.getElementById('movie_time_'+ticketing_id);
             if (movie_year == ch_date.getFullYear() && movie_month==ch_date.getMonth() + 1 && movie_day == date){
-                var newContent = "시작 시간: " + (movie_hour) + ":" + (movie_minute)+ " 상영 시간 : " + movie_time + "<br>";
-                s+=newContent
+                s+='<a href="/" id="movie_a">';
+                s+="시작 시간 => " + movie_hour + " : " + movie_minute + " 상영 시간 : " + movie_time +"분";
+                s+="</a><br>";
+                times.innerHTML=s;
             }
         });
-        var times = document.getElementById('movie_time')
-        times.innerHTML=s;
+        if (s==""){
+            alert('상영하는 영화가 없어요 ㅠ');
+        }
    }
+    let del_text = (elements) => {
+         elements.forEach(function(element) {
+            let ticketing_id=element.dataset.id;
+            s="";
+            var times = document.getElementById('movie_time_'+ticketing_id);
+            times.innerHTML=s;
+        });
+    }
 </script>
 {% endblock %}

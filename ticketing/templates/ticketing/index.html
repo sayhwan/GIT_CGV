@@ -1,31 +1,31 @@
 {% extends 'ticketing/ticketing_base.html' %}
 {% block contents %}
 <div>송도CGV타임스페이스</div>
-        <div id="movies">
-        {% for movie in movie_list %}
-            <div class="movie-wrap" onmouseover="showButtons(this)" onmouseout="hideButtons(this)">
-                <div class="image-wrap">
-                    <a href="{% url 'ticketing:date' movie.id %}"><img src="{{movie.image.url}}" width="200" height="290"></a>
+    <div id="movies">
+    {% for movie in movie_list %}
+        <div class="movie-wrap" onmouseover="showButtons(this)" onmouseout="hideButtons(this)">
+            <div class="image-wrap">
+                <a href="{% url 'ticketing:date' movie.id %}"><img src="{{movie.image.url}}" width="200" height="290"></a>
+            </div>
+            <div id="moviebar">
+                <div style="float: left">
+                {% if movie.age == 0 %}
+                    <img src="https://i.namu.wiki/i/LcAHxvkrcu7sFoOM9_zQIIcBD1nVUJfVOYrVjKLVPBTIWOaov8Zi_vKRzEJUD19FWLIUYZ-AuKnMDiXMzC2GOGRTtb94EDyppyuBQTpWbaMQhMIHBBLP9IB0pgnPb_RPxE6bA3Wcz2ekwBzTX4goSQ.svg" border="0" width="30" height="30">
+                {% elif movie.age == 12 %}
+                    <img src="https://i.namu.wiki/i/6CHa1NRfKDR1uu38weQVouuMtZkCCa3NNyKps_v2pKq6EIrdD1LnuH0DJNMB9ZzIpFlYiAoJpYoAzgEds0PIcdMlDxYCO-oFu-q4SMuZk5VqcpXMYEqJPgqh3_UExa7shvgZL_TekM7ps5Hz8zV-yQ.svg" border="0" width="30" height="30">
+                {% elif movie.age == 15 %}
+                    <img src="https://i.namu.wiki/i/T_FgKqWvVDPqypUs6ZzAXc16Xj4nTuGZc0xdBb1kD7jkJ9SULjC4i-yVpNUbKqC2D444M_Dp_iu3uyF6zfGhbSrBlHic8MXofX2q7-LBWEDLCFZpRX2qVT9QxIE4XcINb6BGZzBw5bNXbGdPnhs2CA.svg" border="0" width="30" height="30">
+                {% elif movie.age == 18 %}
+                    <img src="https://i.namu.wiki/i/aqKHmUkkffV5leo2ATI1EUrlYSJk9Xc0flP5KooLhE15YQQoXRvK1VjG4j_kTHr1HJCgRtlMLvMSyUl1D8X5PvEwUYVyQTr_r5nKVR-ssmTddRBGgmsed15UwEw6TXTyT0897dT23qoIJN3Q7xuMKA.svg" border="0" width="30" height="30">
+                {% else %}
+                    <img src="https://i.namu.wiki/i/6YTdMLcUpH0aMr1Y0u_o4_13dYFigliZSu_VuKMGF4UTC5DGS_kfgF7ixsm3_PZfR9m9GHrqj5O_bV8jicSr9UYkqMIeWDi6NRt-fKqobWd6as6BhCDXwoao2yWokfzg1LS_RF01gugWDLRIEr_8cQ.svg" border="0" width="30" height="30">
+                {% endif %}
                 </div>
-                <div id="moviebar">
-                    <div style="float: left">
-                    {% if movie.age == 0 %}
-                        <img src="https://i.namu.wiki/i/LcAHxvkrcu7sFoOM9_zQIIcBD1nVUJfVOYrVjKLVPBTIWOaov8Zi_vKRzEJUD19FWLIUYZ-AuKnMDiXMzC2GOGRTtb94EDyppyuBQTpWbaMQhMIHBBLP9IB0pgnPb_RPxE6bA3Wcz2ekwBzTX4goSQ.svg" border="0" width="30" height="30">
-                    {% elif movie.age == 12 %}
-                        <img src="https://i.namu.wiki/i/6CHa1NRfKDR1uu38weQVouuMtZkCCa3NNyKps_v2pKq6EIrdD1LnuH0DJNMB9ZzIpFlYiAoJpYoAzgEds0PIcdMlDxYCO-oFu-q4SMuZk5VqcpXMYEqJPgqh3_UExa7shvgZL_TekM7ps5Hz8zV-yQ.svg" border="0" width="30" height="30">
-                    {% elif movie.age == 15 %}
-                        <img src="https://i.namu.wiki/i/T_FgKqWvVDPqypUs6ZzAXc16Xj4nTuGZc0xdBb1kD7jkJ9SULjC4i-yVpNUbKqC2D444M_Dp_iu3uyF6zfGhbSrBlHic8MXofX2q7-LBWEDLCFZpRX2qVT9QxIE4XcINb6BGZzBw5bNXbGdPnhs2CA.svg" border="0" width="30" height="30">
-                    {% elif movie.age == 18 %}
-                        <img src="https://i.namu.wiki/i/aqKHmUkkffV5leo2ATI1EUrlYSJk9Xc0flP5KooLhE15YQQoXRvK1VjG4j_kTHr1HJCgRtlMLvMSyUl1D8X5PvEwUYVyQTr_r5nKVR-ssmTddRBGgmsed15UwEw6TXTyT0897dT23qoIJN3Q7xuMKA.svg" border="0" width="30" height="30">
-                    {% else %}
-                        <img src="https://i.namu.wiki/i/6YTdMLcUpH0aMr1Y0u_o4_13dYFigliZSu_VuKMGF4UTC5DGS_kfgF7ixsm3_PZfR9m9GHrqj5O_bV8jicSr9UYkqMIeWDi6NRt-fKqobWd6as6BhCDXwoao2yWokfzg1LS_RF01gugWDLRIEr_8cQ.svg" border="0" width="30" height="30">
-                    {% endif %}
-                    </div>
-                    <div>
-                       {{movie.title}}
-                    </div>
+                <div>
+                   {{movie.title}}
                 </div>
             </div>
-        {% endfor %}
         </div>
+    {% endfor %}
+    </div>
 {% endblock %}

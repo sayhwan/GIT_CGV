@@ -1,4 +1,5 @@
 from django.db import models
+from datetime import date
 
 # Create your models here.
 class Movie(models.Model):
@@ -6,7 +7,7 @@ class Movie(models.Model):
     image = models.ImageField(upload_to='images/',blank=True,null=True)
     age = models.IntegerField(default=0)
     summary = models.TextField(max_length=2000)
-    date = models.DateTimeField(auto_now_add=True)
+    date = models.DateField(default=date.today)
     rank = models.IntegerField(default=0)
     times = models.CharField(default='120',max_length=20,verbose_name='상영시간')
     def __str__(self):

@@ -7,4 +7,5 @@ from movies.models import *
 class MovieList(ListView):
     model = Movie
 
-
+class MovieDetail(DetailView):
+    model = Movie

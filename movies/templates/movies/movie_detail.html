@@ -1,0 +1,71 @@
+{% extends 'movies/movie_base.html' %}
+{% block title %}{% endblock %}
+{% block contents %}
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Do+Hyeon&display=swap');
+        .detail{
+        display:grid;
+        grid-template-columns:1fr 2fr;
+        font-size:20px;
+        text-align:left;
+        margin-left:250px;
+        margin-right:250px;
+        margin-top:30px;
+        margin-bottom:0px;
+        }
+        .text{
+        display:grid;
+        grid-template-rows:1fr 1fr 1fr 3fr
+        }
+        .title{
+        font-family: 'Do Hyeon', sans-serif;
+        display:flex;
+        margin-right: auto;
+        gap: 30px;
+        font-size: 30px;
+        text-align: center;
+        }
+        .ticket{
+            border: 1px solid white;
+            border-radius: 5px;
+            padding: 15px 40px;
+            background-color: black;
+            color: white;
+            text-align: center;
+            margin-left: 390px;
+        }
+    </style>
+
+    <div class="detail">
+        <img src="{{movie.image.url}}" width="200" height="290">
+
+        <div class="text">
+            <div class="title">
+                {% if movie.age == 0 %}
+                <img src="../../../media/images/movie_all.svg"  border="0" width="30" height="30">
+                {% elif movie.age == 12 %}
+                <img src="../../../media/images/movie_12.svg"  border="0" width="30" height="30">
+                {% elif movie.age == 15 %}
+                <img src="../../../media/images/movie_15.svg"  border="0" width="30" height="30">
+                {% elif movie.age == 18 %}
+                <img src="../../../media/images/movie_18.svg"  border="0" width="30" height="30">
+                {% else %}
+                <img src="../../../media/images/movie_reject.svg"  border="0" width="30" height="30">
+                {% endif %}
+                {{movie.title}}
+            </div>
+            <p>개봉일 : {{movie.date}} / 감독 :
+                {% for dir in movie.director.all %}
+                {{dir.name}}
+                {% endfor %}
+            </p>
+
+
+            <p>상영 시간 : {{movie.times}}분</p>
+            {{movie.summary}}
+        </div>
+    </div>
+    <div>
+        <a href="{% url 'ticketing:index' %}" class="ticket">예매하기</a>
+    </div>
+{% endblock %}

@@ -6,7 +6,7 @@ from .models import Movie, Ticketing,Cinemas
 @admin.register(Ticketing)
 class TicketingAdmin(admin.ModelAdmin):
     list_display = ('cinema', 'seat_all','movie', 'movie_times','date')
-
+    fields=['cinema','movie','date']
     def save_model(self, request, obj, form, change):
         # obj는 현재 수정 중인 Ticketing의 인스턴스입니다.
         # form은 TicketingAdmin에서 사용되는 폼입니다.

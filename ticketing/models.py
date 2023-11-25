@@ -16,11 +16,10 @@ class Ticketing(models.Model):
     cinema = models.ForeignKey(Cinemas,on_delete=models.CASCADE)
     seat_all = models.JSONField(default=list)
     movie = models.ForeignKey(Movie,on_delete=models.CASCADE)
-    start_time = models.TextField(max_length=20,verbose_name='시작 시간')
-    finish_time = models.TextField(max_length=20,verbose_name='끝나는 시간')
-    date = models.TextField(max_length=20,verbose_name='날짜')
+    date = models.DateTimeField(verbose_name='날짜')
+    movie_times = models.CharField(max_length=20,verbose_name='상영 시간')
     def __str__(self):
-        return self.date + '/' + self.start_time + "~" + self.finish_time
+        return str(self.date)
 
     class Meta:
         db_table='tiketing'

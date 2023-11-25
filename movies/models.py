@@ -8,6 +8,7 @@ class Movie(models.Model):
     summary = models.TextField(max_length=2000)
     date = models.DateTimeField(auto_now_add=True)
     rank = models.IntegerField(default=0)
+    times = models.CharField(default='120',max_length=20,verbose_name='상영시간')
     def __str__(self):
         return self.title
 

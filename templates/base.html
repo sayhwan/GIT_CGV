@@ -58,7 +58,6 @@
         margin-left:250px;
         margin-right:250px;
         }
-
         footer{
         display:grid;
         grid-template-columns:1fr;
@@ -66,6 +65,112 @@
         text-align:left;
         margin-left:250px;
         margin-bottom:30px;
+        }
+         .movie-wrap .image-wrap {
+        position: relative;
+        width: 200px;
+        height: 290px;
+        }
+
+        .movie-wrap .more {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+            border: 1px solid white;
+            border-radius: 5px;
+            padding: 5px 10px;
+            background-color: black;
+            color: white;
+            text-align: center;
+        }
+        .button {
+            display:flex;
+            position: absolute;
+            bottom: 10px;
+            left: 0;
+            right: 0;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 10px;
+        }
+        .movie-wrap:hover .more {
+            opacity: 1;
+            visibility: visible;
+        }
+        @import url('https://fonts.googleapis.com/css?family=Questrial&display=swap');
+
+
+        #Calendar_div {
+            background-color : white;
+            height: auto;
+            width: 400px;
+            margin: 0px;
+            padding: 20px;
+            margin: 0 auto;
+            border-radius:5px;
+            box-shadow:0px 40px 30px -20px rgba(0,0,0,0.3);
+        }
+
+        td {
+            width: 50px;
+            height: 50px;
+        }
+
+        .Calendar {
+            text-align: center;
+        }
+
+        .Calendar>thead>tr:first-child>td {
+            font-family: 'Questrial', sans-serif;
+            font-size: 1.1em;
+            font-weight: bold;
+        }
+
+        .Calendar>thead>tr:last-child>td {
+            font-family: 'Questrial', sans-serif;
+            font-weight: 600;
+        }
+
+        .Calendar>tbody>tr>td>p {
+            font-family: 'Montserrat', sans-serif;
+            height: 45px;
+            width: 45px;
+            border-radius: 45px;
+            transition-duration: .2s;
+            line-height: 45px;
+            margin: 2.5px;
+            display: block;
+            text-align: center;
+        }
+
+        .pastDay {
+            color: lightgray;
+        }
+
+        .today {
+            background-color: #F5D042;
+            color: #fff;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .futureDay {
+            background-color: #FFFFFF;
+            cursor: pointer;
+        }
+        .futureDay:hover{
+            background:#eee;
+        }
+
+        .futureDay.choiceDay,
+        .today.choiceDay {
+            background: #0A174E;
+            color: #fff;
+            font-weight: 600;
+            cursor: pointer;
         }
     </style>
 </head>
@@ -86,16 +191,22 @@
         </div>
         {% endblock %}
     </div>
-    {% block contents %}
     <br>
     <br>
     {% block title %}<h2>박스오피스</h2>{% endblock %}
+    {% block contents %}
     <br>
     <br>
     <div id="movies">
         {% for movie in movie_list %}
-            <div>
-                <img src="{{movie.image.url}}" width="200" height="290">
+            <div class="movie-wrap" onmouseover="showButtons(this)" onmouseout="hideButtons(this)">
+                <div class="image-wrap">
+                    <img src="{{movie.image.url}}" width="200" height="290">
+                    <div class="button">
+                        <a href="movie_detail/{{ movie.id }}" class="more">상세 정보</a>
+                        <a href="{% url 'ticketing:index' %}" class="more">예매하기</a>
+                    </div>
+                </div>
                 <div id="moviebar">
                     <div style="float: left">
                     {% if movie.age == 0 %}
@@ -118,6 +229,8 @@
         {% endfor %}
     </div>
     {% endblock %}
+    {% block movies %}{% endblock %}
+    {% block calender %}{% endblock %}
     <br>
     <br>
     <footer>
@@ -131,5 +244,22 @@
         <div>
         </div>
     </footer>
+    <script>
+    function showButtons(element) {
+        var buttons = element.querySelectorAll('.more');
+        buttons.forEach(function(button) {
+            button.style.opacity = 1;
+            button.style.visibility = 'visible';
+        });
+    }
+
+    function hideButtons(element) {
+        var buttons = element.querySelectorAll('.more');
+        buttons.forEach(function(button) {
+            button.style.opacity = 0;
+            button.style.visibility = 'hidden';
+        });
+    }
+    </script>
 </body>
 </html>

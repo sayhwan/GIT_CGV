@@ -1,0 +1,16 @@
+{% extends 'ticketing/index.html' %}
+{% block movies %}
+<h1>{{movie.title}}</h1>
+    <div id ="movie_time"></div>
+
+<script>
+    let choice_day = document.getElementsByClassName("choiceDay");
+    let date_array = JSON.parse('{{ date_list|safe }}');
+    let s="";
+    for (let date of date_array) {
+        s+=date.year;
+    }
+    var movieTimeElement = document.getElementById("movie_time");
+    movieTimeElement.innerHTML = s;
+</script>
+{% endblock %}

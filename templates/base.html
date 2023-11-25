@@ -172,6 +172,9 @@
             font-weight: 600;
             cursor: pointer;
         }
+        .youtube{
+            background-color: black;
+        }
     </style>
 </head>
 <body>
@@ -191,6 +194,9 @@
         </div>
         {% endblock %}
     </div>
+    {% block youtube %}
+    <div align="middle" class="youtube"><iframe width="1000" height="500" src="https://www.youtube.com/embed/RaGNLFbVfLw?si=pgXujCbz_djF4GO5?autoplay=1&mute=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>
+    {% endblock %}
     <br>
     <br>
     {% block title %}<h2>박스오피스</h2>{% endblock %}
@@ -229,7 +235,7 @@
         {% endfor %}
     </div>
     {% endblock %}
-    {% block movies %}{% endblock %}
+     {% block movies %}{% endblock %}
     {% block calender %}{% endblock %}
     <br>
     <br>

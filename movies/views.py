@@ -9,3 +9,4 @@ class MovieList(ListView):
 
 class MovieDetail(DetailView):
     model = Movie
+

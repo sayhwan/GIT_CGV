@@ -10,6 +10,7 @@ class Movie(models.Model):
     date = models.DateField(default=date.today)
     rank = models.IntegerField(default=0)
     times = models.CharField(default='120',max_length=20,verbose_name='상영시간')
+    director = models.ManyToManyField('Director')
     def __str__(self):
         return self.title
 
@@ -17,3 +18,14 @@ class Movie(models.Model):
         db_table='movie'
         verbose_name='영화'
         verbose_name_plural='영화'
+
+class Director(models.Model):
+    name = models.CharField(max_length=100)
+    country = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name='감독'
+        verbose_name_plural='감독'

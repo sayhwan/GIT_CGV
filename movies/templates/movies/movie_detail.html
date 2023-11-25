@@ -1,21 +1,38 @@
 {% extends 'movies/movie_base.html' %}
+{% block title %}{% endblock %}
 {% block contents %}
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Do+Hyeon&display=swap');
         .detail{
         display:grid;
         grid-template-columns:1fr 2fr;
-        font-size:10px;
+        font-size:20px;
         text-align:left;
         margin-left:250px;
         margin-right:250px;
         margin-top:30px;
+        margin-bottom:0px;
         }
         .text{
         display:grid;
-        grid-template-rows:1fr 10fr
+        grid-template-rows:1fr 1fr 1fr 3fr
         }
         .title{
+        font-family: 'Do Hyeon', sans-serif;
         display:flex;
+        margin-right: auto;
+        gap: 30px;
+        font-size: 30px;
+        text-align: center;
+        }
+        .ticket{
+            border: 1px solid white;
+            border-radius: 5px;
+            padding: 15px 40px;
+            background-color: black;
+            color: white;
+            text-align: center;
+            margin-left: 390px;
         }
     </style>
 
@@ -37,7 +54,18 @@
                 {% endif %}
                 {{movie.title}}
             </div>
+            <p>개봉일 : {{movie.date}} / 감독 :
+                {% for dir in movie.director.all %}
+                {{dir.name}}
+                {% endfor %}
+            </p>
+
+
+            <p>상영 시간 : {{movie.times}}분</p>
             {{movie.summary}}
         </div>
+    </div>
+    <div>
+        <a href="{% url 'ticketing:index' %}" class="ticket">예매하기</a>
     </div>
 {% endblock %}

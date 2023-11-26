@@ -41,17 +41,7 @@
 
         <div class="text">
             <div class="title">
-                {% if movie.age == 0 %}
-                <img src="../../../media/images/movie_all.svg"  border="0" width="30" height="30">
-                {% elif movie.age == 12 %}
-                <img src="../../../media/images/movie_12.svg"  border="0" width="30" height="30">
-                {% elif movie.age == 15 %}
-                <img src="../../../media/images/movie_15.svg"  border="0" width="30" height="30">
-                {% elif movie.age == 18 %}
-                <img src="../../../media/images/movie_18.svg"  border="0" width="30" height="30">
-                {% else %}
-                <img src="../../../media/images/movie_reject.svg"  border="0" width="30" height="30">
-                {% endif %}
+                <img src={{"../../"|add:movie.age_url}}  border="0" width="30" height="30">
                 {{movie.title}}
             </div>
             <p>개봉일 : {{movie.date}} / 감독 :

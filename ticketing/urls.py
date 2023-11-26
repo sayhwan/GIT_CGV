@@ -7,5 +7,4 @@ urlpatterns = [
     path('area/<int:m_id>/', Areas, name='area'),
     path('theater/<int:m_id>/<int:a_id>/', Theaters, name='theater'),
     path('date/<int:m_id>/<int:th_id>/', Date, name='date'),
-
 ]

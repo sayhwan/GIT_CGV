@@ -10,6 +10,4 @@ urlpatterns = [
     path('seat/<int:t_id>/', Seat,name='seat'),
     path('ticketing/<int:t_id>', Ticketing_seat, name='ticketing'),
     path('seat/<int:t_id>/button/',Button, name='button'),
-
-
 ]

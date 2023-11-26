@@ -1,7 +1,51 @@
-{% extends 'ticketing/area.html' %}
+{% extends 'ticketing/index.html' %}
+{% load static %}
 {% block message %}<h1>극장을 선택하세요</h1><br>{% endblock %}
-{% block area %}<h1>선택한 지역 {{area.name}}</h1><br>{% endblock %}
-{% block contents%}
+{% block area %}
+<style>
+    h3{
+    text-align: center;
+    }
+</style>
+<h1>선택한 지역</h1><br>
+<h3>{{area.name}}</h3><hr>
+{% endblock %}
+
+{% block movie %}
+    <style>
+        h1{
+        font-size:30px;
+        text-align:center;
+        place-items:center;
+        color: black;
+        margin-top:0px;
+        }
+        .mt{
+        font-size:20px;
+        text-align:center;
+        font-family: 'Do Hyeon', sans-serif;
+        margin:10px;
+        color: black;
+        }
+        .mb{
+        display: flex;
+        justify-content: center;
+        }
+    </style>
+    <h1>선택한 영화</h1><br>
+    <div class="mb">
+        <div>
+            <img src={{"../../../"|add:movie.age_url}}  border="0" width="30" height="30">
+        </div>
+        <div class="mt">
+           {{movie.title}}
+        </div>
+    </div>
+    <hr>
+
+{% endblock %}
+
+{% block contents %}
 {% for theater in theater_list %}
     <a href="{% url 'ticketing:date' movie.id theater.id %}" id="movie_a"><h3>{{theater.name}}</h3></a>
 {% endfor %}

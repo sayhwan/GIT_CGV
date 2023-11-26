@@ -6,6 +6,7 @@ class Movie(models.Model):
     title = models.CharField(max_length=100)
     image = models.ImageField(upload_to='images/',blank=True,null=True)
     age = models.IntegerField(default=0)
+    age_url = models.CharField(max_length=2000,default='/')
     summary = models.TextField(max_length=2000)
     date = models.DateField(default=date.today)
     rank = models.IntegerField(default=0)

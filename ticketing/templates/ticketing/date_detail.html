@@ -1,12 +1,25 @@
 {% extends 'ticketing/theater.html' %}
 {% block message %}<h1>시간, 날짜를 선택하세요</h1><br>{% endblock %}
+{% block theater %}
+<h1>선택한 극장</h1>
+<h3>{{theater}}</h3><hr>
+{% endblock %}
 {% block times %}
+<style>
+    .time{
+    display: grid;
+    grid-template-rows: 1fr 1fr 1fr;
+    border: 1px;
+    }
+</style>
+    <div class="time">
     {% for ticketing in ticketing_list %}
     <div class="ticketing-data" data-year="{{ ticketing.date.year }}" data-month="{{ ticketing.date.month }}" data-day="{{ ticketing.date.day }}"
-    data-hour="{{ ticketing.date.hour }}" data-minute="{{ ticketing.date.minute }}" data-time="{{ ticketing.movie_times}}" data-id="{{ ticketing.id }}"></div>
+    data-hour="{{ ticketing.date.hour }}" data-minute="{{ ticketing.date.minute }}" data-time="{{ ticketing.movie_times}}" data-id="{{ ticketing.id }}"
+    data-cinema="{{ticketing.cinema.numbering}}"></div>
         <a href="{% url 'ticketing:seat' ticketing.id %}" id="movie_a"><h3 id="movie_time_{{ticketing.id}}"></h3></a>
     {% endfor %}
-
+    </div>
 {% endblock %}
 {% block calender %}
     <div id="Calendar_div">
@@ -34,7 +47,7 @@
             <tbody>
             </tbody>
         </table>
-    </div>
+    </div><hr>
 <script>
         window.onload = function () { buildCalendar(); }    // 웹 페이지가 로드되면 buildCalendar 실행
 
@@ -132,10 +145,12 @@
             let movie_minute=element.dataset.minute;
             let movie_time=element.dataset.time;
             let ticketing_id=element.dataset.id;
+            let cinema=element.dataset.cinema;
             var times = document.getElementById('movie_time_'+ticketing_id);
             if (movie_year == ch_date.getFullYear() && movie_month==ch_date.getMonth() + 1 && movie_day == date){
-                s+="시작 시간 => " + movie_hour + " : " + movie_minute + " 상영 시간 : " + movie_time +"분";
+                s+=movie_hour + " : " + movie_minute + " / "+ cinema+"관";
                 times.innerHTML=s;
+                times.style.display = 'block';
             }
         });
         if (s==""){
@@ -145,7 +160,6 @@
     let del_text = (elements) => {
          elements.forEach(function(element) {
             let ticketing_id=element.dataset.id;
-            s="";
             var times = document.getElementById('movie_time_'+ticketing_id);
             times.innerHTML=s;
         });

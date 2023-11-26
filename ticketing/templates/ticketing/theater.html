@@ -1,0 +1,8 @@
+{% extends 'ticketing/area.html' %}
+{% block message %}<h1>극장을 선택하세요</h1><br>{% endblock %}
+{% block area %}<h1>선택한 지역 {{area.name}}</h1><br>{% endblock %}
+{% block contents%}
+{% for theater in theater_list %}
+    <a href="{% url 'ticketing:date' movie.id theater.id %}" id="movie_a"><h3>{{theater.name}}</h3></a>
+{% endfor %}
+{% endblock %}

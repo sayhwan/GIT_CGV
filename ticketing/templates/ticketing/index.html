@@ -1,11 +1,11 @@
 {% extends 'ticketing/ticketing_base.html' %}
+{% block message %}<h1>영화를 선택하세요</h1><br>{% endblock %}
 {% block contents %}
-<div>송도CGV타임스페이스</div>
     <div id="movies">
     {% for movie in movie_list %}
         <div class="movie-wrap" onmouseover="showButtons(this)" onmouseout="hideButtons(this)">
             <div class="image-wrap">
-                <a href="{% url 'ticketing:date' movie.id %}"><img src="{{movie.image.url}}" width="200" height="290"></a>
+                <a href="{% url 'ticketing:area' movie.id %}"><img src="{{movie.image.url}}" width="200" height="290"></a>
             </div>
             <div id="moviebar">
                 <div style="float: left">

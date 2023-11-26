@@ -2,16 +2,12 @@ from django.contrib import admin
 # Register your models here.
 
 from django.contrib import admin
-from .models import Movie, Ticketing,Cinemas
+from .models import Ticketing,Cinemas,Area,Theater
 @admin.register(Ticketing)
 class TicketingAdmin(admin.ModelAdmin):
-    list_display = ('cinema', 'seat_all','movie', 'movie_times','date')
-    fields=['cinema','movie','date']
+    list_display = ('cinema', 'movie','date','theater')
+    fields=['cinema','movie','date','theater']
     def save_model(self, request, obj, form, change):
-        # obj는 현재 수정 중인 Ticketing의 인스턴스입니다.
-        # form은 TicketingAdmin에서 사용되는 폼입니다.
-
-        # 만약 Movie의 times를 Ticketing의 movie_times로 설정하고자 한다면, 아래와 같이 할 수 있습니다.
         obj.movie_times = obj.movie.times
         obj.save()
         a=obj.cinema.seat
@@ -25,3 +21,15 @@ class TicketingAdmin(admin.ModelAdmin):
 @admin.register(Cinemas)
 class CinemasAdmin(admin.ModelAdmin):
     pass
+@admin.register(Area)
+class AreaAdmin(admin.ModelAdmin):
+    pass
+@admin.register(Theater)
+class TheaterAdmin(admin.ModelAdmin):
+
+    list_display = ('name', 'area')
+    fields = ['name', 'area']
+    def save_model(self, request, obj, form, change):
+        super().save_model(request, obj, form, change)
+        obj.area.theaters+=1
+        obj.area.save()

@@ -1,11 +1,12 @@
-{% extends 'ticketing/index.html' %}
-{% block movies %}
-<h1>{{movie.title}}</h1>
-    {% for ticketing in movie.ticketing_set.all %}
+{% extends 'ticketing/theater.html' %}
+{% block message %}<h1>시간, 날짜를 선택하세요</h1><br>{% endblock %}
+{% block times %}
+    {% for ticketing in ticketing_list %}
     <div class="ticketing-data" data-year="{{ ticketing.date.year }}" data-month="{{ ticketing.date.month }}" data-day="{{ ticketing.date.day }}"
     data-hour="{{ ticketing.date.hour }}" data-minute="{{ ticketing.date.minute }}" data-time="{{ ticketing.movie_times}}" data-id="{{ ticketing.id }}"></div>
     <h3 id="movie_time_{{ticketing.id}}"></h3>
     {% endfor %}
+
 {% endblock %}
 {% block calender %}
     <div id="Calendar_div">
@@ -153,3 +154,6 @@
     }
 </script>
 {% endblock %}
+
+
+

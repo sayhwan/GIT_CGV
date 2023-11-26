@@ -1,19 +1,57 @@
-{% extends 'login/login_base.html' %}
-{% block contents %}
-<div> 회원가입 페이지!</div>
 
-<form action="" method="POST">
-    {% csrf_token %}
-    {% for form in forms%}
-    <div>
-        <label for="{{form.auto_id}}">{{form.label}}</label>
-        {{form}}
-    </div>
-    {% endfor %}
-    
-    {% if error %}
-    {{error}}
-    {% endif %}
-    <button type="submit" name="register-submit" value="register">회원가입하기</button>
-</form>
+    place-items: center;
+    }
+
+    button {
+    width: 500px;
+    height: 50px;
+    margin: 0px 10px;
+    color: #fff;
+    background: #166caa;
+    border: none;
+    border-radius: 20px;
+    font-size: 20px;
+    cursor: pointer;
+    margin-top: 30px;
+    margin-bottom: 100px;
+    }
+    .int-area {
+        width: 400px;
+        position: relative;
+        margin-top: 20px;
+    }
+    .t {
+    text-align: center;
+    }
+    label {
+    margin: 0px 10px;
+    margin-left: 120px;
+    }
+
+</style>
+
+<br>
+<br>
+<br>
+<br>
+<div class="t">
+<h1>회원가입</h1>
+</div>
+
+<div class="login">
+    <form action="" method="POST">
+        {% csrf_token %}
+        {% for form in forms%}
+        <div class="int-area">
+            <label for="{{form.auto_id}}">{{form.label}}</label>
+            {{form}}
+        </div>
+        {% endfor %}
+
+        {% if error %}
+        {{error}}
+        {% endif %}
+        <button type="submit" name="register-submit" value="register">회원가입</button>
+    </form>
+</div>
 {% endblock contents %}

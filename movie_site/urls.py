@@ -26,7 +26,6 @@ urlpatterns = [
     path('login/', include('login.urls')),
     path('movies/',include('movies.urls')),
     path('ticketing/',include('ticketing.urls')),
-
 ]
 from django.conf import settings
 urlpatterns += static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)

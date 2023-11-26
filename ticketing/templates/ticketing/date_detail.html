@@ -4,7 +4,7 @@
     {% for ticketing in ticketing_list %}
     <div class="ticketing-data" data-year="{{ ticketing.date.year }}" data-month="{{ ticketing.date.month }}" data-day="{{ ticketing.date.day }}"
     data-hour="{{ ticketing.date.hour }}" data-minute="{{ ticketing.date.minute }}" data-time="{{ ticketing.movie_times}}" data-id="{{ ticketing.id }}"></div>
-    <h3 id="movie_time_{{ticketing.id}}"></h3>
+        <a href="{% url 'ticketing:seat' ticketing.id %}" id="movie_a"><h3 id="movie_time_{{ticketing.id}}"></h3></a>
     {% endfor %}
 
 {% endblock %}
@@ -134,9 +134,7 @@
             let ticketing_id=element.dataset.id;
             var times = document.getElementById('movie_time_'+ticketing_id);
             if (movie_year == ch_date.getFullYear() && movie_month==ch_date.getMonth() + 1 && movie_day == date){
-                s+='<a href="/" id="movie_a">';
                 s+="시작 시간 => " + movie_hour + " : " + movie_minute + " 상영 시간 : " + movie_time +"분";
-                s+="</a><br>";
                 times.innerHTML=s;
             }
         });

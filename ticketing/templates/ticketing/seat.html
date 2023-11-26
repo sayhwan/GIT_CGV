@@ -1,0 +1,77 @@
+{% extends 'ticketing/ticketing_base.html' %}
+{% block contents %}
+    <style>
+        #seat_button{
+        margin: 1px 1px;
+        }
+        .seat{
+        display: grid;
+        grid-template-rows:{{row}};
+        grid-template-columns:{{column}};
+        gap:1px;
+        }
+        .0{
+        background-color: gray;
+        }
+        .1{
+        background-color: red;
+        pointer-events: none;
+        }
+        .2{
+        background-color: yellow;
+        }
+    </style>
+    {% if error %}
+    <h1>좌석이 선택되지 않았습니다.</h1>
+    {% endif %}
+    <div id="seat_list" data-list="{{seat_list|safe}}"></div>
+    <form action="{% url 'ticketing:ticketing' ticketing.id %}" method="POST">
+        {% csrf_token %}
+    <div class="seat">
+            {% for row in seat_list %}
+                    {% for value in row %}
+                        <div id="seat_button"><button  type="button" onclick="change_class({{forloop.parentloop.counter}},{{ forloop.counter }})"
+                                                      class="{{value}}"> {{value}}</button></div>
+                    {% endfor %}
+            {% endfor %}
+    </div>
+        <input type="submit" value="좌석 예매하기">
+    </form>
+<script>
+let change_class = (row, column) => {
+    const csrf_token = "{{ csrf_token }}";
+    let value = 0;
+    let li_dj = document.getElementById('seat_list');
+    var li = JSON.parse(li_dj.dataset.list);
+    row -= 1;
+    column -= 1;
+
+    if (li[row][column] === 2) {
+        value = 0;
+    } else if(li[row][column]==1){
+        alert('얘매된 좌석입니다 다른 좌석을 선택해 주세요');
+        return
+    }else value = 2;
+
+    let urlvar = '/ticketing/seat/' + {{ ticketing.id }} + '/button/';
+
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', urlvar, true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.setRequestHeader('X-CSRFToken', csrf_token);
+    xhr.onload = function() {
+        if (xhr.status === 200) {
+            console.log('버튼 클릭');
+            location.reload();
+        }
+    };
+    var data = {
+        'row': row,
+        'column': column,
+        'value': value,
+
+    };
+    xhr.send(JSON.stringify(data));
+}
+</script>
+{% endblock %}

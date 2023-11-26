@@ -1,7 +1,11 @@
-from django.shortcuts import render,get_object_or_404
+from django.shortcuts import render,get_object_or_404,reverse
 from django.views.generic import *
 from movies.models import Movie
-from .models import Area,Theater
+from .models import Area,Theater,Ticketing
+from login.models import *
+from login.decorators import login_required
+from django.http import HttpResponseRedirect
+import json
 # Create your views here.
 class Index(ListView):
     template_name = 'ticketing/index.html'
@@ -70,5 +74,58 @@ def Date(request, m_id, th_id ):
     context['ticketing_list']=ticketing_list
     login_session = request.session.get('login_session', '')
     context['login_session'] = login_session
-
+    request.session['button']=0
     return render(request,template_name='ticketing/date_detail.html',context=context)
+@login_required
+def Seat(request, t_id):
+    login_session = request.session.get('login_session', '')
+    button = request.session.get('button','')
+    ticketing = get_object_or_404(Ticketing, pk=t_id)
+    user=get_object_or_404(User, user_id=login_session)
+    seat_list = ticketing.seat_all.copy()
+    rows = len(seat_list)
+    columns = len(seat_list[0])
+    context = {}
+    context['user']=user
+    context['ticketing']=ticketing
+    context['login_session']=login_session
+    context['row']="1fr "*rows
+    context['column']="1fr "*columns
+    context['seat_list']=seat_list
+    context['error']=button
+    return render(request, template_name='ticketing/seat.html', context=context)
+
+def Ticketing_seat(request,t_id):
+    login_session = request.session.get('login_session', '')
+    ticketing = get_object_or_404(Ticketing, pk=t_id)
+    user = get_object_or_404(User, user_id=login_session)
+    button=request.session.get('button','')
+    if request.method=='POST':
+        if button==True:
+            return HttpResponseRedirect(reverse('ticketing:seat', args=(t_id,)))
+        for i in range(len(ticketing.seat_all)):
+            for j in range(len(ticketing.seat_all[0])):
+                if ticketing.seat_all[i][j]==2:
+                    ticketing.seat_all[i][j]=1
+        ticketing.save()
+        return HttpResponseRedirect(reverse(viewname='base'))
+
+
+
+def Button(request,t_id):
+    if request.method == 'POST':
+        data = json.loads(request.body.decode('utf-8'))
+        ticketing = get_object_or_404(Ticketing,pk=t_id)
+        ticketing.seat_all[data['row']][data['column']]=data['value']
+        ticketing.save()
+        li=ticketing.seat_all.copy()
+        flag=0
+        while flag == 0:
+            for row in li:
+                for column in row:
+                    if column == 2:
+                        flag=1
+            break
+        request.session['button']=not bool(flag)
+        return HttpResponseRedirect(reverse('ticketing:seat', args=(t_id,)))
+    return HttpResponseRedirect(reverse('ticketing:seat', args=(t_id,)))

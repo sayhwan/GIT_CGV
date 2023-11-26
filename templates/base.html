@@ -205,9 +205,15 @@
     <br>
     <br>
     {% block title %}<h2>박스오피스</h2>{% endblock %}
+    <br>
+    <br>
+    {% block movie%}{% endblock %}
+    {% block area%}{% endblock%}
+    {% block theater %}{% endblock %}
+    {% block message %}{% endblock %}
+    {% block times %}{% endblock %}
+    {% block calender %}{% endblock %}
     {% block contents %}
-    <br>
-    <br>
     <div id="movies">
         {% for movie in movie_list %}
             <div class="movie-wrap" onmouseover="showButtons(this)" onmouseout="hideButtons(this)">
@@ -240,8 +246,6 @@
         {% endfor %}
     </div>
     {% endblock %}
-     {% block movies %}{% endblock %}
-    {% block calender %}{% endblock %}
     <br>
     <br>
     <footer>

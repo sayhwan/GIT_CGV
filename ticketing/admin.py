@@ -5,7 +5,7 @@ from django.contrib import admin
 from .models import Ticketing,Cinemas,Area,Theater
 @admin.register(Ticketing)
 class TicketingAdmin(admin.ModelAdmin):
-    list_display = ('cinema', 'movie','date','theater')
+    list_display = ('cinema', 'movie','date','theater','user')
     fields=['cinema','movie','date','theater']
     def save_model(self, request, obj, form, change):
         obj.movie_times = obj.movie.times
@@ -14,6 +14,7 @@ class TicketingAdmin(admin.ModelAdmin):
         n=int(a[1:a.index(',')])
         m=int(a[a.index(',')+1:-1])
         obj.seat_all=[[0 for x in range(n)]for y in range(m)]
+        obj.user=[]
         obj.save()
 
 

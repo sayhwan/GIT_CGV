@@ -81,7 +81,8 @@ def Seat(request, t_id):
     login_session = request.session.get('login_session', '')
     button = request.session.get('button','')
     ticketing = get_object_or_404(Ticketing, pk=t_id)
-    if ticketing.user==True:
+    print(login_session)
+    if login_session in ticketing.user:
         return HttpResponseRedirect(reverse(viewname='base'))
     user=get_object_or_404(User, user_id=login_session)
     seat_list = ticketing.seat_all.copy()
@@ -120,7 +121,7 @@ def Ticketing_seat(request,t_id):
         user_ticket.save()
         user.user_ticket.add(user_ticket)
         user.save()
-        ticketing.user=True
+        ticketing.user.append(user.user_id)
         ticketing.save()
 
         return HttpResponseRedirect(reverse(viewname='base'))

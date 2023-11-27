@@ -53,7 +53,7 @@ class Ticketing(models.Model):
     date = models.DateTimeField(verbose_name='날짜')
     movie_times = models.CharField(max_length=20,verbose_name='상영 시간',default=0)
     theater = models.ForeignKey(Theater,on_delete=models.CASCADE)
-    user= models.BooleanField(default=False)
+    user= models.JSONField(default=list)
     def __str__(self):
         return str(self.date)
 

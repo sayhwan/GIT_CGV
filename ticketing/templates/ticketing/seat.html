@@ -1,24 +1,42 @@
 {% extends 'ticketing/ticketing_base.html' %}
 {% block contents %}
     <style>
-        #seat_button{
-        margin: 1px 1px;
+        @import url('https://fonts.googleapis.com/css2?family=Do+Hyeon&display=swap');
+        .seat_button button{
+        border-radius: 10px;
+        padding: 20px 20px;
+        }
+        h1{
+        text-align: center;
         }
         .seat{
         display: grid;
         grid-template-rows:{{row}};
         grid-template-columns:{{column}};
-        gap:1px;
+        grid-row-gap: 20px;
+        grid-column-gap: 20px;
+        text-align: center;
+        margin-left: 300px;
+        margin-right: 300px;
         }
-        .0{
-        background-color: gray;
+        .seat_button button[class="0"]{
+        background-color: #5F5F5F;
         }
-        .1{
+        .seat_button button[class="1"]{
         background-color: red;
         pointer-events: none;
         }
-        .2{
+        .seat_button button[class="2"]{
         background-color: yellow;
+        }
+        #btn{
+        font-family: 'Do Hyeon', sans-serif;
+        font-size: 20px;
+        border-radius: 10px;
+        background-color: #FF9500;
+        display: block;
+        margin: 0 auto;
+        padding: 20px 120px;
         }
     </style>
     {% if error %}
@@ -27,15 +45,16 @@
     <div id="seat_list" data-list="{{seat_list|safe}}"></div>
     <form action="{% url 'ticketing:ticketing' ticketing.id %}" method="POST">
         {% csrf_token %}
-    <div class="seat">
-            {% for row in seat_list %}
-                    {% for value in row %}
-                        <div id="seat_button"><button  type="button" onclick="change_class({{forloop.parentloop.counter}},{{ forloop.counter }})"
-                                                      class="{{value}}"> {{value}}</button></div>
-                    {% endfor %}
-            {% endfor %}
-    </div>
-        <input type="submit" value="좌석 예매하기">
+        <div class="seat">
+                {% for row in seat_list %}
+                        {% for value in row %}
+                            <div class="seat_button"><button type="button" onclick="change_class({{forloop.parentloop.counter}},{{ forloop.counter }})" class="{{value}}"></button></div>
+                        {% endfor %}
+                {% endfor %}
+        </div>
+        <br>
+        <br>
+        <input type="submit" value="좌석 예매하기" id="btn">
     </form>
 <script>
 let change_class = (row, column) => {
@@ -49,7 +68,7 @@ let change_class = (row, column) => {
     if (li[row][column] === 2) {
         value = 0;
     } else if(li[row][column]==1){
-        alert('얘매된 좌석입니다 다른 좌석을 선택해 주세요');
+        alert('예매된 좌석입니다. 다른 좌석을 선택해 주세요');
         return
     }else value = 2;
 

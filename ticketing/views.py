@@ -81,6 +81,9 @@ def Seat(request, t_id):
     login_session = request.session.get('login_session', '')
     button = request.session.get('button','')
     ticketing = get_object_or_404(Ticketing, pk=t_id)
+    print(login_session)
+    if login_session in ticketing.user:
+        return HttpResponseRedirect(reverse(viewname='base'))
     user=get_object_or_404(User, user_id=login_session)
     seat_list = ticketing.seat_all.copy()
     rows = len(seat_list)
@@ -109,16 +112,17 @@ def Ticketing_seat(request,t_id):
                 if ticketing.seat_all[i][j]==2:
                     ticketing.seat_all[i][j]=1
                     a.append((i,j))
-        ticketing.save()
-        user_ticket=User_ticket()
-        user_ticket.theater=ticketing.theater
-        user_ticket.movie=ticketing.movie
-        user_ticket.date=ticketing.date
-        user_ticket.seat=a
-        user_ticket.cinema=ticketing.cinema
+        user_ticket = User_ticket()
+        user_ticket.theater = ticketing.theater
+        user_ticket.movie = ticketing.movie
+        user_ticket.date = ticketing.date
+        user_ticket.seat = a
+        user_ticket.cinema = ticketing.cinema
         user_ticket.save()
         user.user_ticket.add(user_ticket)
         user.save()
+        ticketing.user.append(user.user_id)
+        ticketing.save()
 
         return HttpResponseRedirect(reverse(viewname='base'))
 

@@ -133,11 +133,10 @@
             return value;
         }
     let compare = (ch_date,date) => {
-        s="";
+        let s=""
         var movie_Elements = document.querySelectorAll('.ticketing-data');
         del_text(movie_Elements);
         movie_Elements.forEach(function(element) {
-            s="";
             let movie_year=element.dataset.year;
             let movie_month=element.dataset.month;
             let movie_day=element.dataset.day;
@@ -148,9 +147,10 @@
             let cinema=element.dataset.cinema;
             var times = document.getElementById('movie_time_'+ticketing_id);
             if (movie_year == ch_date.getFullYear() && movie_month==ch_date.getMonth() + 1 && movie_day == date){
-                s+=movie_hour + " : " + movie_minute + " / "+ cinema+"관";
+                s=movie_hour + " : " + movie_minute + " / "+ cinema+"관";
                 times.innerHTML=s;
                 times.style.display = 'block';
+                a=0;
             }
         });
         if (s==""){
@@ -161,7 +161,7 @@
          elements.forEach(function(element) {
             let ticketing_id=element.dataset.id;
             var times = document.getElementById('movie_time_'+ticketing_id);
-            times.innerHTML=s;
+            times.innerHTML="";
         });
     }
 </script>

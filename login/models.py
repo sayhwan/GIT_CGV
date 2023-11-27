@@ -1,5 +1,4 @@
 from django.db import models
-from ticketing.models import Ticketing
 #DB에 user라는 데이터들 생성
 class User(models.Model):
     user_id = models.CharField(max_length=32, unique=True, verbose_name='유저 아이디')

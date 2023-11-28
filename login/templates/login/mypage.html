@@ -1,0 +1,27 @@
+{% extends 'login/login_base.html' %}
+{% block contents %}
+<style>
+    .mp {
+    text-align: center;
+    border: 1px solid black;
+    }
+</style>
+
+<div class="mp">
+    <h1>예매 내역</h1><hr>
+    <br>
+    <br>
+    {% for ticket in user.user_ticket.all %}
+        영화 : {{ticket.movie}}<br><br>
+        {{ticket.theater}}영화관 {{ticket.cinema}}<br><br>
+        [행, 열] :
+        {% for row in ticket.seat %}
+            {{row}}
+        {% endfor %}
+
+    {% endfor %}
+    <br>
+    <br>
+    <br>
+</div>
+{% endblock %}

@@ -3,6 +3,9 @@ from .models import User
 from django.db import transaction
 from argon2 import PasswordHasher
 from .forms import RegisterForm, LoginForm
+from django.views.generic import *
+from django.shortcuts import render,get_object_or_404,reverse
+
 
 
 # 웹 페이지에서 받은 정보 DB로 받아오기
@@ -55,6 +58,13 @@ def Login(request):
                     context['error'] = value
         return render(request, 'login/login.html', context)
 
+def Mypage(request):
+    login_session = request.session.get('login_session', '')
+    context={}
+    context['login_session'] = login_session
+    user=get_object_or_404(User,user_id=login_session)
+    context['user'] = user
+    return render(request,template_name='login/mypage.html',context=context)
 
 # 로그아웃 정의
 def Logout(request):
